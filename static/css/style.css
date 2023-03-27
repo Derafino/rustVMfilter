@@ -1,0 +1,24 @@
+.search_form {
+    margin: 2%;
+    text-align: center;
+}
+
+.input_filter {
+    margin: 2%;
+}
+
+.results_count {
+    padding-left: 5%;
+}
+
+.search_table {
+    margin: 0% 5% 5%;
+}
+
+
+
+th, td {
+
+    font-style: italic;
+    width: 3%;
+}

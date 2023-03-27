@@ -1,0 +1,30 @@
+<div class="shop_sell_order">
+    <div class="results_count">Results: {{ count }}</div>
+    {% if sell_orders %}
+        <div class="search_table">
+            <table class="table table-bordered border-primary">
+                <thead>
+                <tr>
+                    <th scope="col">item_name</th>
+                    <th scope="col">quantity</th>
+                    <th scope="col">currency_name</th>
+                    <th scope="col">cost_per_item</th>
+                    <th scope="col">shop</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for sell_order in sell_orders %}
+                    <tr>
+                        <td>{{ sell_order.item_name }}</td>
+                        <td>{{ sell_order.quantity }}</td>
+                        <td>{{ sell_order.currency_name }}</td>
+                        <td>{{ sell_order.cost_per_item }}</td>
+                        <td>{{ sell_order.shop.name }} ({{ sell_order.shop.id }})</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
