@@ -15,7 +15,10 @@
     margin: 0% 5% 5%;
 }
 
-
+.item_img{
+height: 64px;
+  width: 64px;
+}
 
 th, td {
 
