@@ -4,16 +4,6 @@
 {% endblock %}
 <body>
 {% block content %}
-
-    <div class="search_form">
-        <form>
-            <input class="input_filter" type="text" id="item_name" placeholder="item_name...">
-            <input class="input_filter" type="text" id="currency_name" placeholder="currency_name...">
-        </form>
-    </div>
-
-    <div id="search_results"></div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <div class="info">
         <p>
             {% if rust_items_count %}
@@ -23,11 +13,23 @@
             {% endif %}
             <a href="/update_items">UPDATE</a></p>
         <p>{% if shops_count or sell_orders_count %}
-            Total <b class="bold_text">{{ shops_count }}</b> Shops with <b class="bold_text">{{ sell_orders_count }}</b> Sell Orders
+            Total <b class="bold_text">{{ shops_count }}</b> Shops with <b class="bold_text">{{ sell_orders_count }}</b>
+            Sell Orders
         {% else %}
-            You should update base of shops -
+            You should update base of shops
         {% endif %}<a href="/update_shops">UPDATE</a></p>
     </div>
+    {% if rust_items_count and  shops_count %}
+        <div class="search_form">
+            <form>
+                <input class="input_filter" type="text" id="item_name" placeholder="item_name...">
+                <input class="input_filter" type="text" id="currency_name" placeholder="currency_name...">
+            </form>
+        </div>
+    {% endif %}
+    <div id="search_results"></div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 
 {% endblock %}
 </body>

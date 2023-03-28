@@ -1,10 +1,9 @@
 .search_form {
-    margin: 2%;
     text-align: center;
 }
 
 .input_filter {
-    margin: 2%;
+    margin: 0% 2% 0%;
 }
 
 .results_count {
@@ -20,13 +19,16 @@ height: 64px;
   width: 64px;
 }
 
-th, td {
+th, td ,thead{
 
-    font-style: italic;
+    /*font-style: italic;*/
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18px;
     width: 3%;
 }
 .info{
-    margin: 5%;
+    margin: 0% 5% 0%;
 }
 .bold_text{
     font-weight: bold;
