@@ -1,7 +1,7 @@
 import asyncio
 import json
 
-from flask import Flask, abort, request, render_template
+from flask import Flask, abort, request, render_template, redirect
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import aliased
@@ -39,6 +39,41 @@ def update_items_db():
         abort(500, message="An error occurred while inserting the shop.")
 
 
+def update_shops_db():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    rust_markers = loop.run_until_complete(get_info.get_markers())
+    shops = [marker for marker in rust_markers if marker.type == 3]
+
+    db.session.query(Shop).delete()
+    db.session.query(SellOrder).delete()
+    db.session.commit()
+    for s in shops:
+        shop = Shop(id=s.id, name=s.name)
+        try:
+            db.session.merge(shop)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while inserting the shop.")
+
+        new_orders = [SellOrder(
+            item_id=order.item_id,
+            quantity=order.quantity,
+            currency_id=order.currency_id,
+
+            cost_per_item=order.cost_per_item,
+            item_is_blueprint=order.item_is_blueprint,
+            currency_is_blueprint=order.currency_is_blueprint,
+            amount_in_stock=order.amount_in_stock,
+            shop_id=s.id
+        ) for order in s.sell_orders]
+        try:
+            db.session.bulk_save_objects(new_orders)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occurred while inserting orders.")
+
+
 def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -49,48 +84,25 @@ def create_app():
 
     @app.route('/update_shops')
     def update_shops():
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        rust_markers = loop.run_until_complete(get_info.get_markers())
-        shops = [marker for marker in rust_markers if marker.type == 3]
-
-        db.session.query(Shop).delete()
-        db.session.query(SellOrder).delete()
-        db.session.commit()
-        for s in shops:
-            shop = Shop(id=s.id, name=s.name)
-            try:
-                db.session.merge(shop)
-                db.session.commit()
-            except SQLAlchemyError:
-                abort(500, message="An error occurred while inserting the shop.")
-
-            new_orders = [SellOrder(
-                item_id=order.item_id,
-                quantity=order.quantity,
-                currency_id=order.currency_id,
-
-                cost_per_item=order.cost_per_item,
-                item_is_blueprint=order.item_is_blueprint,
-                currency_is_blueprint=order.currency_is_blueprint,
-                amount_in_stock=order.amount_in_stock,
-                shop_id=s.id
-            ) for order in s.sell_orders]
-            try:
-                db.session.bulk_save_objects(new_orders)
-                db.session.commit()
-            except SQLAlchemyError:
-                abort(500, message="An error occurred while inserting orders.")
-        return 'Updated'
+        update_shops_db()
+        return redirect('/')
 
     @app.route('/update_items')
     def update_items():
         update_items_db()
-        return 'Updated'
+        return redirect('/')
 
     @app.route('/')
     def index():
-        return render_template('orders.html')
+
+        rust_items = db.session.query(RustItem).all()
+        shops = db.session.query(Shop).all()
+        sell_orders = db.session.query(SellOrder).all()
+        rust_items_count = len(rust_items)
+        shops_count = len(shops)
+        sell_orders_count = len(sell_orders)
+        return render_template('orders.html', rust_items_count=rust_items_count, shops_count=shops_count,
+                               sell_orders_count=sell_orders_count)
 
     @app.route('/search')
     def search():

@@ -25,3 +25,9 @@ th, td {
     font-style: italic;
     width: 3%;
 }
+.info{
+    margin: 5%;
+}
+.bold_text{
+    font-weight: bold;
+}
