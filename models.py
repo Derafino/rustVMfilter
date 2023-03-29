@@ -15,6 +15,19 @@ class SellOrder(db.Model):
     item = db.relationship('RustItem', foreign_keys=[item_id])
     currency = db.relationship('RustItem', foreign_keys=[currency_id])
 
+    def __repr__(self):
+        return f'<SellOrder id={self.id}, ' \
+               f'item_id={self.item_id},' \
+               f'quantity={self.quantity},' \
+               f'currency_id={self.currency_id},' \
+               f'cost_per_item={self.cost_per_item},' \
+               f'item_is_blueprint={self.item_is_blueprint},' \
+               f'currency_is_blueprint={self.currency_is_blueprint},' \
+               f'amount_in_stock={self.amount_in_stock},' \
+               f'shop_id={self.shop_id},' \
+               f'item={self.item},' \
+               f'currency={self.currency}>'
+
 
 class RustItem(db.Model):
     itemid = db.Column(db.Integer, primary_key=True)

@@ -14,22 +14,37 @@
     margin: 0% 5% 5%;
 }
 
-.item_img{
-height: 64px;
-  width: 64px;
+.item_img {
+    height: 64px;
+    width: 64px;
 }
 
-th, td ,thead{
+.td_numbers {
+    width: 1%;
+}
 
-    /*font-style: italic;*/
+thead, td {
+
     text-align: center;
     vertical-align: middle;
     font-size: 18px;
-    width: 3%;
+    width: 10%;
 }
-.info{
+
+.info {
     margin: 0% 5% 0%;
 }
-.bold_text{
+
+.bold_text {
     font-weight: bold;
+}
+
+.notification {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    height: 100vh;
+    margin-bottom: 0;
 }

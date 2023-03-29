@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}
+    Good deals
+{% endblock %}
+<body>
+{% block content %}
+
+    {% if good_deals %}
+        <div class="search_table">
+            {% for deal in good_deals %}
+                Coefficient: {{ deal['coefficient'] }}
+                <table class="table table-bordered border-primary">
+
+                    <thead>
+                    <tr>
+                        <th scope="col">item</th>
+                        <th scope="col">quantity</th>
+                        <th scope="col">currency</th>
+                        <th scope="col">cost_per_item</th>
+                        <th scope="col">amount_in_stock</th>
+                        <th scope="col">shop</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in deal['deal'] %}
+                        <tr>
+                            <td><img class="item_img" src="{{ "static/" + order.item.image }}">{{ order.item.name }}
+                            </td>
+                            <td class="td_numbers">{{ order.quantity }}</td>
+                            <td><img class="item_img"
+                                     src="{{ "static/" + order.currency.image }}">{{ order.currency.name }}
+                            </td>
+                            <td class="td_numbers">{{ order.cost_per_item }}</td>
+                            <td class="td_numbers">{{ order.amount_in_stock }}</td>
+                            <td>{{ order.shop.name }} ({{ order.shop.id }})</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="notification">No good deals</p>
+    {% endif %}
+
+{% endblock %}
+</body>
+</html>

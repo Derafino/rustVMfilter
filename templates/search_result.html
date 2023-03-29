@@ -18,10 +18,10 @@
                 {% for sell_order in sell_orders %}
                     <tr>
                         <td><img class="item_img" src="{{ "static/" + sell_order.item.image }}">{{ sell_order.item.name }}</td>
-                        <td>{{ sell_order.quantity }}</td>
+                        <td class="td_numbers">{{ sell_order.quantity }}</td>
                         <td><img class="item_img" src="{{ "static/" + sell_order.currency.image }}">{{ sell_order.currency.name }}</td>
-                        <td>{{ sell_order.cost_per_item }}</td>
-                        <td>{{ sell_order.amount_in_stock }}</td>
+                        <td class="td_numbers">{{ sell_order.cost_per_item }}</td>
+                        <td class="td_numbers">{{ sell_order.amount_in_stock }}</td>
                         <td>{{ sell_order.shop.name }} ({{ sell_order.shop.id }})</td>
 
                     </tr>

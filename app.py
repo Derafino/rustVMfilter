@@ -11,7 +11,7 @@ from get_items import retrieve_rust_items
 from marker_parser import get_info
 from models import Shop, SellOrder, RustItem
 from flask_migrate import Migrate
-
+import numpy as np
 
 def update_items_db():
     items_json_file = retrieve_rust_items()
@@ -82,6 +82,24 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+    @app.route('/good_deals')
+    def make_profit():
+        sell_orders = db.session.query(SellOrder).all()
+        all_deals = list()
+        good_deals = list()
+        for order in sell_orders:
+            for i in sell_orders:
+                if order.item_id == i.currency_id and i.item_id == order.currency_id:
+                    deal = {order, i}
+                    if deal not in all_deals:
+                        all_deals.append(deal)
+                        coefficient = np.round((order.cost_per_item / order.quantity) *
+                                               (i.cost_per_item / i.quantity),
+                                               3)
+                        if coefficient < 1 and order.amount_in_stock and i.amount_in_stock:
+                            good_deals.append({'deal': deal, 'coefficient': coefficient})
+
+        return render_template('good_deals.html', good_deals=sorted(good_deals, key=lambda x: x['coefficient']))
     @app.route('/update_shops')
     def update_shops():
         update_shops_db()
